@@ -11,7 +11,7 @@ type Model struct {
 }
 
 type User struct {
-	gorm.Model
+	Model
 	Username string `sql:"size:64" json:"username" validate:"max=64"`
 	Password string `sql:"size:64" json:"password" validate:"max=64"`
 	Role     string `sql:"size:32" json:"role" validate:"max=32"`
