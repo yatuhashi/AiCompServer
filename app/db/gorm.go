@@ -1,8 +1,8 @@
-package controllers
+package db
 
 import (
 	// _ "github.com/go-sql-driver/mysql"
-	"base/app/models"
+	"Base/app/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/revel/revel"
@@ -20,6 +20,7 @@ func InitDB() {
 	db.DB()
 	db.AutoMigrate(&models.User{})
 	DB = db
+	// DB.Create(&models.User{Username: "tester"})
 }
 
 func dbInfoString() string {

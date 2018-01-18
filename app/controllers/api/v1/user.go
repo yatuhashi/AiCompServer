@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	"Base/app/controllers"
-	"base/app/models"
+	"Base/app/db"
+	"Base/app/models"
 	"github.com/revel/revel"
 	"gopkg.in/validator.v2"
-	// "log"
 )
 
 type ApiUser struct {
@@ -14,7 +13,7 @@ type ApiUser struct {
 
 func (c ApiUser) Index() revel.Result {
 	users := []models.User{}
-	if err := controllers.DB.Order("id desc").Find(&users).Error; err != nil {
+	if err := db.DB.Order("id desc").Find(&users).Error; err != nil {
 		return c.HandleInternalServerError("Record Find Failure")
 	}
 	r := Response{users}
@@ -23,7 +22,7 @@ func (c ApiUser) Index() revel.Result {
 
 func (c ApiUser) Show(id int) revel.Result {
 	user := &models.User{}
-	if err := controllers.DB.First(&user, id).Error; err != nil {
+	if err := db.DB.First(&user, id).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
 	r := Response{user}
@@ -38,7 +37,7 @@ func (c ApiUser) Create() revel.Result {
 	if err := validator.Validate(user); err != nil {
 		return c.HandleBadRequestError(err.Error())
 	}
-	if err := controllers.DB.Create(user).Error; err != nil {
+	if err := db.DB.Create(user).Error; err != nil {
 		return c.HandleBadRequestError(err.Error())
 	}
 	r := Response{user}
@@ -47,7 +46,7 @@ func (c ApiUser) Create() revel.Result {
 
 func (c ApiUser) Update(id int) revel.Result {
 	userOld := &models.User{}
-	if err := controllers.DB.First(&userOld, id).Error; err != nil {
+	if err := db.DB.First(&userOld, id).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
 	userNew := &models.User{}
@@ -57,7 +56,7 @@ func (c ApiUser) Update(id int) revel.Result {
 	if err := validator.Validate(userNew); err != nil {
 		return c.HandleBadRequestError(err.Error())
 	}
-	if err := controllers.DB.Model(&userOld).Update(&userNew).Error; err != nil {
+	if err := db.DB.Model(&userOld).Update(&userNew).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
 	r := Response{userNew}
@@ -66,10 +65,10 @@ func (c ApiUser) Update(id int) revel.Result {
 
 func (c ApiUser) Delete(id int) revel.Result {
 	user := &models.User{}
-	if err := controllers.DB.First(&user, id).Error; err != nil {
+	if err := db.DB.First(&user, id).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
-	if err := controllers.DB.Delete(&user).Error; err != nil {
+	if err := db.DB.Delete(&user).Error; err != nil {
 		return c.HandleInternalServerError("Record Delete Failure")
 	}
 	r := Response{"success delete"}
