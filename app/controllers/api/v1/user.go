@@ -5,7 +5,7 @@ import (
 	"base/app/models"
 	"github.com/revel/revel"
 	"gopkg.in/validator.v2"
-	"log"
+	// "log"
 )
 
 type ApiUser struct {
@@ -22,38 +22,45 @@ func (c ApiUser) Index() revel.Result {
 }
 
 func (c ApiUser) Show(id int) revel.Result {
-	users := []models.User{}
-	if err := controllers.DB.First(&users, id).Error; err != nil {
+	user := &models.User{}
+	if err := controllers.DB.First(&user, id).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
-	r := Response{users}
+	r := Response{user}
 	return c.RenderJSON(r)
 }
 
 func (c ApiUser) Create() revel.Result {
 	user := &models.User{}
 	if err := c.BindParams(user); err != nil {
-		log.Printf("test@@@@@@@@@@")
 		return c.HandleBadRequestError(err.Error())
 	}
-	log.Print(user.Username)
-	log.Print(user.Password)
-	log.Print(user.Role)
 	if err := validator.Validate(user); err != nil {
-		log.Printf("test@@@@@@@@@@")
-		log.Print(err)
 		return c.HandleBadRequestError(err.Error())
 	}
 	if err := controllers.DB.Create(user).Error; err != nil {
-		return c.HandleInternalServerError("Record Create Failure")
+		return c.HandleBadRequestError(err.Error())
 	}
 	r := Response{user}
 	return c.RenderJSON(r)
 }
 
-func (c ApiUser) Update() revel.Result {
-	// user := &models.User{}
-	r := Response{"update"}
+func (c ApiUser) Update(id int) revel.Result {
+	userOld := &models.User{}
+	if err := controllers.DB.First(&userOld, id).Error; err != nil {
+		return c.HandleNotFoundError(err.Error())
+	}
+	userNew := &models.User{}
+	if err := c.BindParams(userNew); err != nil {
+		return c.HandleBadRequestError(err.Error())
+	}
+	if err := validator.Validate(userNew); err != nil {
+		return c.HandleBadRequestError(err.Error())
+	}
+	if err := controllers.DB.Model(&userOld).Update(&userNew).Error; err != nil {
+		return c.HandleNotFoundError(err.Error())
+	}
+	r := Response{userNew}
 	return c.RenderJSON(r)
 }
 
