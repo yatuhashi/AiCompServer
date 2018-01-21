@@ -9,25 +9,17 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 
 ### Go to http://localhost:9000/ and you'll see:
 
-    "It works"
+```
+// ApiUser   Base/app/controllers/api/v1/user.go
+GET     /api/v1/user                            ApiUser.Index
+GET     /api/v1/user/:id                        ApiUser.Show
+POST    /api/v1/user                            ApiUser.Create
+PUT     /api/v1/user/:id                        ApiUser.Update
+DELETE  /api/v1/user/:id                        ApiUser.Delete
 
-## Code Layout
 
-The directory structure of a generated Revel application:
-
-    conf/             Configuration directory
-        app.conf      Main app configuration file
-        routes        Routes definition file
-
-    app/              App sources
-        init.go       Interceptor registration
-        controllers/  App controllers go here
-
-    messages/         Message files
-
-    public/           Public static assets
-        css/          CSS files
-        js/           Javascript files
-        images/       Image files
-
-    tests/            Test suites
+// ApiAuth   Base/app/controllers/api/v1/auth.go
+GET     /api/v1/signin                          ApiAuth.GetSessionID
+POST    /api/v1/signin                          ApiAuth.SignIn
+GET     /api/v1/signout                         ApiAuth.SignOut
+```
