@@ -16,6 +16,9 @@ PUT     /api/v1/user/:id                        ApiUser.Update
 DELETE  /api/v1/user/:id                        ApiUser.Delete
 
 
+GET     /api/v1/signin                          ApiAuth.GetSessionID
+POST    /api/v1/signin                          ApiAuth.SignIn
+GET     /api/v1/signout                         ApiAuth.SignOut
 
 
 # Ignore favicon requests

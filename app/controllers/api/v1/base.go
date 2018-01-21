@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/revel/revel"
-	"log"
 	"net/http"
 )
 
@@ -21,12 +20,6 @@ type Response struct {
 }
 
 func (c *ApiV1Controller) BindParams(s interface{}) error {
-	//	var jsonData map[string]interface{}
-	log.Print(c.Request.ContentType)
-	var jsonData []byte
-	jsonData = c.Params.JSON
-	log.Print(jsonData)
-	// log.Print(json.Unmarshal(jsonData, &s))
 	return json.Unmarshal(c.Params.JSON, &s)
 }
 
