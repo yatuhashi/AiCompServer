@@ -21,12 +21,6 @@ POST    /api/v1/signin                          ApiAuth.SignIn
 GET     /api/v1/signout                         ApiAuth.SignOut
 
 
-# Ignore favicon requests
-GET     /favicon.ico                            404
-
-# Map static resources from the /app/public folder to the /public path
-GET     /public/*filepath                       Static.Serve("public")
-
 # Catch all, this will route any request into the controller path
 #
 #                    **** WARNING ****
