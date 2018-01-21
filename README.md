@@ -10,16 +10,14 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 ### This is Base System
 
 ```
-.
 ├── README.md
 ├── app
 │   ├── controllers
-│   │   ├── api
-│   │   │   └── v1
-│   │   │       ├── auth.go
-│   │   │       ├── base.go
-│   │   │       └── user.go
-│   │   └── app.go
+│   │   └── api
+│   │       └── v1
+│   │           ├── auth.go
+│   │           ├── base.go
+│   │           └── user.go
 │   ├── db
 │   │   └── gorm.go
 │   ├── init.go
@@ -33,11 +31,9 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 ├── conf
 │   ├── app.conf
 │   └── routes
-├── db.sqlite3
 └── tests
     └── apptest.go
 ```
-11 directories, 14 files
 
 
 
@@ -57,4 +53,3 @@ GET     /api/v1/signin                          ApiAuth.GetSessionID
 POST    /api/v1/signin                          ApiAuth.SignIn
 GET     /api/v1/signout                         ApiAuth.SignOut
 ```
-
