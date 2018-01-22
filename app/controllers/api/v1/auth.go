@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"Base/app/db"
-	"Base/app/models"
+	"AiCompServer/app/db"
+	"AiCompServer/app/models"
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
@@ -33,25 +33,25 @@ type ApiAuth struct {
 
 func (c ApiAuth) GetSessionID() revel.Result {
 	session := TokenGenerator(32)
-	cache.Set(session, session, 2*time.Minute)
-	c.Response.Out.Header().Add("token", session)
+	go cache.Set("session_"+session, session, 2*time.Minute)
+	c.Response.Out.Header().Add("authentication", session)
 	r := Response{"Get Session ID"}
 	log.Print("&&", session, "&&")
 	return c.RenderJSON(r)
 }
 
 func (c ApiAuth) SignIn() revel.Result {
-	session := c.Request.Header.Get("token")
+	session := c.Request.Header.Get("authentication")
 	if session == "" {
 		return c.HandleNotFoundError("Retry Session")
 	}
 	log.Print("&&", session, "&&")
 	var res string
-	if err := cache.Get(session, &res); err != nil {
+	if err := cache.Get("session_"+session, &res); err != nil {
 		r := Response{"Session Timeout"}
 		return c.RenderJSON(r)
 	}
-	go cache.Delete(session)
+	go cache.Delete("session_" + session)
 
 	jsonData := &Auth{}
 	if err := c.BindParams(jsonData); err != nil {
@@ -81,13 +81,13 @@ func (c ApiAuth) SignIn() revel.Result {
 		return c.HandleNotFoundError(err.Error())
 	}
 	r := Response{userNew.Token}
-	go cache.Set(userNew.Token, userNew.Username, 30*time.Minute)
+	go cache.Set("auth_"+userNew.Token, userNew.Username, 30*time.Minute)
 	c.Response.Out.Header().Add("token", userNew.Token)
 	return c.RenderJSON(r)
 }
 
 func (c ApiAuth) SignOut() revel.Result {
-	token := c.Request.Header.Get("token")
+	token := c.Request.Header.Get("authentication")
 	if token == "" {
 		return c.HandleNotFoundError("Not SignIn")
 	}
@@ -98,14 +98,14 @@ func (c ApiAuth) SignOut() revel.Result {
 	if err := db.DB.Model(&user).Update("Token", gorm.Expr("NULL")).Error; err != nil {
 		return c.HandleBadRequestError(err.Error())
 	}
-	go cache.Delete(token)
+	go cache.Delete("auth_" + token)
 	r := Response{"Sign Out"}
 	return c.RenderJSON(r)
 }
 
 func CheckRole(c ApiV1Controller, AllowRole []string) revel.Result {
 	log.Print("CheckRole")
-	token := c.Request.Header.Get("token")
+	token := c.Request.Header.Get("authentication")
 	if token == "" {
 		return c.HandleNotFoundError("Not SignIn")
 	}
@@ -124,7 +124,7 @@ func CheckRole(c ApiV1Controller, AllowRole []string) revel.Result {
 
 func CheckToken(c ApiV1Controller) revel.Result {
 	log.Print("CheckToken")
-	token := c.Request.Header.Get("token")
+	token := c.Request.Header.Get("authentication")
 	if token == "" {
 		return c.HandleNotFoundError("Not SignIn")
 	}
@@ -134,10 +134,10 @@ func CheckToken(c ApiV1Controller) revel.Result {
 	}
 	// Check Token Timeout
 	var res string
-	if err := cache.Get(token, &res); err != nil {
+	if err := cache.Get("auth_"+token, &res); err != nil {
 		r := Response{"Session Timeout"}
 		return c.RenderJSON(r)
 	}
-	go cache.Set(user.Token, user.Username, 30*time.Minute)
+	go cache.Set("auth_"+user.Token, user.Username, 30*time.Minute)
 	return nil
 }

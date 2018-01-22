@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"Base/app/db"
-	"Base/app/models"
+	"AiCompServer/app/db"
+	"AiCompServer/app/models"
 	"encoding/hex"
 	"github.com/revel/revel"
 	"golang.org/x/crypto/scrypt"
@@ -129,6 +129,9 @@ func (c ApiUser) Update(id int) revel.Result {
 	salt := []byte("yatuhashi")
 	converted, _ := scrypt.Key([]byte(userNew.Password), salt, 16384, 8, 1, 32)
 	userNew.Password = hex.EncodeToString(converted[:])
+	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
+		userNew.Role = userOld.Role
+	}
 	if err := db.DB.Model(&userOld).Update(&userNew).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
@@ -150,6 +153,6 @@ func (c ApiUser) Delete(id int) revel.Result {
 	if err := db.DB.Delete(&user).Error; err != nil {
 		return c.HandleInternalServerError("Record Delete Failure")
 	}
-	r := Response{"success delete"}
+	r := Response{"Success Delete"}
 	return c.RenderJSON(r)
 }
