@@ -1,7 +1,7 @@
 package app
 
 import (
-	"Base/app/db"
+	"AiCompServer/app/db"
 	"github.com/revel/revel"
 )
 

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"Base/app/db"
-	"Base/app/models"
+	"AiCompServer/app/db"
+	"AiCompServer/app/models"
 	"encoding/hex"
 	"github.com/revel/revel"
 	"golang.org/x/crypto/scrypt"

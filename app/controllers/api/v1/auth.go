@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"Base/app/db"
-	"Base/app/models"
+	"AiCompServer/app/db"
+	"AiCompServer/app/models"
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
@@ -34,14 +34,14 @@ type ApiAuth struct {
 func (c ApiAuth) GetSessionID() revel.Result {
 	session := TokenGenerator(32)
 	go cache.Set("session_"+session, session, 2*time.Minute)
-	c.Response.Out.Header().Add("token", session)
+	c.Response.Out.Header().Add("authentication", session)
 	r := Response{"Get Session ID"}
 	log.Print("&&", session, "&&")
 	return c.RenderJSON(r)
 }
 
 func (c ApiAuth) SignIn() revel.Result {
-	session := c.Request.Header.Get("token")
+	session := c.Request.Header.Get("authentication")
 	if session == "" {
 		return c.HandleNotFoundError("Retry Session")
 	}
@@ -87,7 +87,7 @@ func (c ApiAuth) SignIn() revel.Result {
 }
 
 func (c ApiAuth) SignOut() revel.Result {
-	token := c.Request.Header.Get("token")
+	token := c.Request.Header.Get("authentication")
 	if token == "" {
 		return c.HandleNotFoundError("Not SignIn")
 	}
@@ -105,7 +105,7 @@ func (c ApiAuth) SignOut() revel.Result {
 
 func CheckRole(c ApiV1Controller, AllowRole []string) revel.Result {
 	log.Print("CheckRole")
-	token := c.Request.Header.Get("token")
+	token := c.Request.Header.Get("authentication")
 	if token == "" {
 		return c.HandleNotFoundError("Not SignIn")
 	}
@@ -124,7 +124,7 @@ func CheckRole(c ApiV1Controller, AllowRole []string) revel.Result {
 
 func CheckToken(c ApiV1Controller) revel.Result {
 	log.Print("CheckToken")
-	token := c.Request.Header.Get("token")
+	token := c.Request.Header.Get("authentication")
 	if token == "" {
 		return c.HandleNotFoundError("Not SignIn")
 	}

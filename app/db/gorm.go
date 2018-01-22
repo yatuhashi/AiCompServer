@@ -2,7 +2,7 @@ package db
 
 import (
 	// _ "github.com/go-sql-driver/mysql"
-	"Base/app/models"
+	"AiCompServer/app/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/revel/revel"
