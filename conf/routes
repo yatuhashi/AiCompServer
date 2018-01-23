@@ -6,6 +6,7 @@
 module:testrunner
 # module:jobs
 
+POST    /api/v1/signup                          ApiUser.Create
 
 GET     /api/v1/signin                          ApiAuth.GetSessionID
 POST    /api/v1/signin                          ApiAuth.SignIn
@@ -13,7 +14,6 @@ DELETE  /api/v1/signin                          ApiAuth.SignOut
 
 GET     /api/v1/users                           ApiUser.Index
 GET     /api/v1/users/:id                       ApiUser.Show
-POST    /api/v1/users                           ApiUser.Create
 PUT     /api/v1/users/:id                       ApiUser.Update
 DELETE  /api/v1/users/:id                       ApiUser.Delete
 

@@ -9,7 +9,7 @@ type Challenge struct {
 
 type Answer struct {
 	BaseModel
-	ChallengeID Challenge
-	UserID      User
+	ChallengeID uint64
+	UserID      uint64
 	Score       int
 }

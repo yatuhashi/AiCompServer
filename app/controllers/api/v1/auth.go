@@ -66,6 +66,7 @@ func (c ApiAuth) SignIn() revel.Result {
 	if err := db.DB.Find(&userOld, models.User{Username: jsonData.Username}).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
+	log.Print("test2")
 
 	if userOld.Password != password {
 		return c.HandleNotFoundError("password is incorrect")
@@ -82,7 +83,7 @@ func (c ApiAuth) SignIn() revel.Result {
 	}
 	r := Response{userNew.Token}
 	go cache.Set("auth_"+userNew.Token, userNew.Username, 30*time.Minute)
-	c.Response.Out.Header().Add("token", userNew.Token)
+	c.Response.Out.Header().Add("authentication", userNew.Token)
 	return c.RenderJSON(r)
 }
 

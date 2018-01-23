@@ -5,6 +5,7 @@ import (
 	"AiCompServer/app/models"
 	"github.com/revel/revel"
 	"gopkg.in/validator.v2"
+	// "log"
 )
 
 type ApiChallenge struct {
@@ -38,6 +39,9 @@ func (c ApiChallenge) Show(id int) revel.Result {
 // User Create
 func (c ApiChallenge) Create() revel.Result {
 	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
+		return err
+	}
+	if err := CheckToken(c.ApiV1Controller); err != nil {
 		return err
 	}
 	challenge := &models.Challenge{}
@@ -98,6 +102,9 @@ func (c ApiChallenge) Delete(id int) revel.Result {
 }
 
 func (c ApiChallenge) Ranking() revel.Result {
+	if err := CheckToken(c.ApiV1Controller); err != nil {
+		return err
+	}
 	r := Response{"Data"}
 	return c.RenderJSON(r)
 }

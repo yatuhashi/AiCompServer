@@ -19,6 +19,8 @@ func InitDB() {
 
 	db.DB()
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Challenge{})
+	db.AutoMigrate(&models.Answer{})
 	DB = db
 	// DB.Create(&models.User{Username: "tester"})
 }
