@@ -104,6 +104,19 @@ func (c ApiAuth) SignOut() revel.Result {
 	return c.RenderJSON(r)
 }
 
+func (c ApiAuth) Role() revel.Result {
+	token := c.Request.Header.Get("authentication")
+	if token == "" {
+		return c.HandleNotFoundError("Not SignIn")
+	}
+	user := &models.User{}
+	if err := db.DB.Find(&user, models.User{Token: token}).Error; err != nil {
+		return c.HandleNotFoundError(err.Error())
+	}
+	r := Response{user.Role}
+	return c.RenderJSON(r)
+}
+
 func CheckRole(c ApiV1Controller, AllowRole []string) revel.Result {
 	log.Print("CheckRole")
 	token := c.Request.Header.Get("authentication")

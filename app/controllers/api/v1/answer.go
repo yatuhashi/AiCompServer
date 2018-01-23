@@ -11,7 +11,7 @@ type ApiAnswer struct {
 	ApiV1Controller
 }
 
-// Challenge Index
+// Answer Index
 func (c ApiAnswer) Index() revel.Result {
 	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
 		return err
@@ -27,7 +27,7 @@ func (c ApiAnswer) Index() revel.Result {
 	return c.RenderJSON(r)
 }
 
-// Challenge Show
+// Answer Show
 func (c ApiAnswer) Show(id int) revel.Result {
 	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
 		return err
@@ -43,7 +43,7 @@ func (c ApiAnswer) Show(id int) revel.Result {
 	return c.RenderJSON(r)
 }
 
-// Challenge Create
+// Answer Create
 func (c ApiAnswer) Create() revel.Result {
 	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
 		return err
@@ -72,7 +72,7 @@ func (c ApiAnswer) Create() revel.Result {
 	return c.RenderJSON(r)
 }
 
-// Challenge Update
+// Answer Update
 func (c ApiAnswer) Update(id int) revel.Result {
 	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
 		return err
@@ -98,7 +98,7 @@ func (c ApiAnswer) Update(id int) revel.Result {
 	return c.RenderJSON(r)
 }
 
-// Challgen Delete
+// Answer Delete
 func (c ApiAnswer) Delete(id int) revel.Result {
 	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
 		return err
