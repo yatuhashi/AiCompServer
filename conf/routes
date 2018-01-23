@@ -32,6 +32,8 @@ PUT    /api/v1/answers/:id                      ApiAnswer.Update
 DELETE /api/v1/answers/:id                      ApiAnswer.Delete
 POST   /api/v1/submit                           ApiAnswer.Submit
 
+GET     /api/v1/challengeanswer/:id             ApiAnswer.UserChallengeAnswer
+
 
 
 # Catch all, this will route any request into the controller path

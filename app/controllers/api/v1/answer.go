@@ -13,9 +13,6 @@ type ApiAnswer struct {
 
 // Answer Index
 func (c ApiAnswer) Index() revel.Result {
-	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
-		return err
-	}
 	if err := CheckToken(c.ApiV1Controller); err != nil {
 		return err
 	}
@@ -29,14 +26,29 @@ func (c ApiAnswer) Index() revel.Result {
 
 // Answer Show
 func (c ApiAnswer) Show(id int) revel.Result {
-	if err := CheckRole(c.ApiV1Controller, []string{"admin"}); err != nil {
-		return err
-	}
 	if err := CheckToken(c.ApiV1Controller); err != nil {
 		return err
 	}
 	answer := &models.Answer{}
 	if err := db.DB.First(&answer, id).Error; err != nil {
+		return c.HandleNotFoundError(err.Error())
+	}
+	r := Response{answer}
+	return c.RenderJSON(r)
+}
+
+// Answer User's Answer of Some Challenge
+func (c ApiAnswer) UserChallengeAnswer(id int) revel.Result {
+	if err := CheckToken(c.ApiV1Controller); err != nil {
+		return err
+	}
+	token := c.Request.Header.Get("authentication")
+	user := &models.User{}
+	if err := db.DB.Find(&user, models.User{Token: token}).Error; err != nil {
+		return c.HandleNotFoundError(err.Error())
+	}
+	answer := &models.Answer{}
+	if err := db.DB.Where("user_id = ? AND challenge_id = ?", user.ID, id).First(&answer).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
 	r := Response{answer}
