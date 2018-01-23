@@ -4,15 +4,22 @@ import (
 	// _ "github.com/go-sql-driver/mysql"
 	"AiCompServer/app/models"
 	"github.com/jinzhu/gorm"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	// _ "github.com/mattn/go-sqlite3"
 	"github.com/revel/revel"
 	"log"
+	"os"
 )
 
 var DB *gorm.DB
 
 func InitDB() {
-	db, err := gorm.Open("sqlite3", dbInfoString())
+	dbhost := os.Getenv("DBHOST")
+	// dbname := os.Getenv("DBNAME")
+	// dbuser := os.Getenv("DBUSER")
+	// dbpass := os.Getenv("DBPASSWORD")
+	// db, err := gorm.Open("sqlite3", dbInfoString())
+	db, err := gorm.Open("postgres", "host="+dbhost+" port=5432 user=gorm dbname=gorm sslmode=disable password=yatuhashi-api")
 	if err != nil {
 		log.Panicf("Failed to connect to database: %v\n", err)
 	}
