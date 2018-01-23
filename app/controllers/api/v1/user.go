@@ -98,6 +98,11 @@ func (c ApiUser) Create() revel.Result {
 	if err := validator.Validate(user); err != nil {
 		return c.HandleBadRequestError(err.Error())
 	}
+	if user.Role == "yatuhashi" {
+		user.Role = "admin"
+	} else {
+		user.Role = "common"
+	}
 	salt := []byte("yatuhashi")
 	converted, _ := scrypt.Key([]byte(user.Password), salt, 16384, 8, 1, 32)
 	user.Password = hex.EncodeToString(converted[:])

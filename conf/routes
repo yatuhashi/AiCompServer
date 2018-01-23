@@ -6,28 +6,33 @@
 module:testrunner
 # module:jobs
 
+POST    /api/v1/signup                          ApiUser.Create
 
 GET     /api/v1/signin                          ApiAuth.GetSessionID
 POST    /api/v1/signin                          ApiAuth.SignIn
 DELETE  /api/v1/signin                          ApiAuth.SignOut
 
-GET     /api/v1/user                            ApiUser.Index
-GET     /api/v1/user/:id                        ApiUser.Show
-POST    /api/v1/user                            ApiUser.Create
-PUT     /api/v1/user/:id                        ApiUser.Update
-DELETE  /api/v1/user/:id                        ApiUser.Delete
+GET     /api/v1/role                            ApiAuth.Role
 
-# GET    /api/v1/ranking                          ApiRanking.Index
-# GET    /api/v1/challenges                       ApiChallenges.Index
-# POST   /api/v1/challenges                       ApiChallenges.Create
-# GET    /api/v1/challenges/:id                   ApiChallenges.Show
-# PUT    /api/v1/challenges/:id                   ApiChallenges.Update
-# DELETE /api/v1/challenges/:id                   ApiChallenges.Delete
-# GET    /api/v1/answers                          ApiAnswers.Index
-# POST   /api/v1/submit                           ApiAnswers.Create
-# GET    /api/v1/answers/:id                      ApiAnswers.Show
-# PUT    /api/v1/answers/:id                      ApiAnswers.Update
-# DELETE /api/v1/answers/:id                      ApiAnswers.Delete
+GET     /api/v1/users                           ApiUser.Index
+GET     /api/v1/users/:id                       ApiUser.Show
+PUT     /api/v1/users/:id                       ApiUser.Update
+DELETE  /api/v1/users/:id                       ApiUser.Delete
+
+GET    /api/v1/ranking                          ApiChallenge.Ranking
+GET    /api/v1/challenges                       ApiChallenge.Index
+POST   /api/v1/challenges                       ApiChallenge.Create
+GET    /api/v1/challenges/:id                   ApiChallenge.Show
+PUT    /api/v1/challenges/:id                   ApiChallenge.Update
+DELETE /api/v1/challenges/:id                   ApiChallenge.Delete
+GET    /api/v1/answers                          ApiAnswer.Index
+POST   /api/v1/answers                          ApiAnswer.Create
+GET    /api/v1/answers/:id                      ApiAnswer.Show
+PUT    /api/v1/answers/:id                      ApiAnswer.Update
+DELETE /api/v1/answers/:id                      ApiAnswer.Delete
+POST   /api/v1/submit                           ApiAnswer.Submit
+
+GET     /api/v1/challengeanswer/:id             ApiAnswer.UserChallengeAnswer
 
 
 
