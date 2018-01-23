@@ -72,7 +72,6 @@ func (c ApiAnswer) Create() revel.Result {
 	if err := db.DB.Find(&user, models.User{Token: token}).Error; err != nil {
 		return c.HandleNotFoundError(err.Error())
 	}
-	answer.UserID = user.ID
 	if err := validator.Validate(answer); err != nil {
 		return c.HandleBadRequestError(err.Error())
 	}
