@@ -5,6 +5,8 @@ import (
 	"AiCompServer/app/models"
 	"github.com/revel/revel"
 	"gopkg.in/validator.v2"
+	// "log"
+	"sort"
 )
 
 type ApiChallenge struct {
@@ -99,10 +101,46 @@ func (c ApiChallenge) Delete(id int) revel.Result {
 	return c.RenderJSON(r)
 }
 
+type Rank struct {
+	Username string
+	Score    int
+}
+
+type Ranks []Rank
+
+func (r Ranks) Len() int {
+	return len(r)
+}
+
+func (r Ranks) Swap(i, j int) {
+	r[i], r[j] = r[j], r[i]
+}
+
+func (r Ranks) Less(i, j int) bool {
+	return r[i].Score < r[j].Score
+}
+
 func (c ApiChallenge) Ranking() revel.Result {
 	if err := CheckToken(c.ApiV1Controller); err != nil {
 		return err
 	}
-	r := Response{"Data"}
+	users := []models.User{}
+	if err := db.DB.Order("id desc").Find(&users).Error; err != nil {
+		return c.HandleNotFoundError("Record Find Failure")
+	}
+	answer := []models.Answer{}
+	score := 0
+	var rank Ranks
+	for _, user := range users {
+		if err := db.DB.Find(&answer, "user_id = ?", user.ID).Error; err != nil {
+			return c.HandleNotFoundError(err.Error())
+		}
+		for _, ans := range answer {
+			score = score + ans.Score
+		}
+		rank = append(rank, Rank{Username: user.Username, Score: score})
+	}
+	sort.Sort(rank)
+	r := Response{rank}
 	return c.RenderJSON(r)
 }
