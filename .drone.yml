@@ -1,6 +1,6 @@
 workspace:
   base: /go
-  path: src/Base
+  path: src/AiCompServer
 pipeline:
   goget:
     image: golang:1.8.1
