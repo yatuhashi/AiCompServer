@@ -23,7 +23,7 @@ func InitDB() {
 	for {
 		db, err := gorm.Open("postgres", "host="+dbhost+" port=5432 user=gorm dbname=gorm sslmode=disable password=yatuhashi-api")
 		if err != nil {
-			log.Panicf("Failed to connect to database: %v\n", err)
+			log.Println("Failed to connect to database: %v\n", err)
 		} else {
 			break
 		}
